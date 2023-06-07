@@ -54,21 +54,14 @@ async function login(req, res) {
   }
 }
 
-async function changePassword(req, res) {
+async function deleteAccount(req, res) {
   try {
-    const user = await User.findByPk(req.user.id)
-    if (!user) throw new Error('User not found')
-
-    const isMatch = user.comparePassword(req.body.curPassword)
-    if (!isMatch) throw new Error('Incorrect password')
-
-    user.password = req.body.newPassword
-    await user.save()
-
-    const token = createJWT(user)
-    res.json({ token })
-  } catch (err) {
-    handleAuthError(err, res)
+    const rowsRemoved = await User.destroy(
+      { where: { id: req.user.id } }
+    )
+    res.status(200).json(rowsRemoved) // Expected: 1
+  } catch (error) {
+    res.status(500).json({ err: error })
   }
 }
 
