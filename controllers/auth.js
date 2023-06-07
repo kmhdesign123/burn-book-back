@@ -59,7 +59,7 @@ async function deleteAccount(req, res) {
     const rowsRemoved = await User.destroy(
       { where: { id: req.user.id } }
     )
-    res.status(200).json(rowsRemoved) // Expected: 1
+    res.status(200).json(rowsRemoved)
   } catch (error) {
     res.status(500).json({ err: error })
   }
@@ -81,4 +81,4 @@ function createJWT(user) {
   return jwt.sign({ user }, process.env.SECRET, { expiresIn: '24h' })
 }
 
-module.exports = { signup, login, changePassword }
+module.exports = { signup, login, deleteAccount }
